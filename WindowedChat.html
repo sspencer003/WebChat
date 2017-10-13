@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Web Messaging Samples</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<base href="//localhost:8085/webchat/samples/" />
+
+<link href="CSS/site.css" rel="stylesheet" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+<link href="Zeacom/zeacom.css" rel="stylesheet" />
+
+<link href="Zeacom/zeacomchat.css" rel="stylesheet" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="Zeacom/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+
+    <style>
+    .wc-webchat {
+        width: auto;
+        height: auto;
+        position: static;
+        background-repeat: no-repeat;
+        background-position: right;
+        -webkit-box-shadow: none;
+        -ms-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .no-title .ui-dialog-titlebar {
+        display: none;
+    }
+
+    #chatTemplate {
+        display: none;
+    }
+
+    .wc-initiating form {
+        width: 40%;
+    }
+
+    .z-dialog-welcome {
+        display: block;
+        color: #09A0CE;
+        font-size: 26px;
+    }
+
+    .wc-initiating p {
+        clear: both;
+        width: 40%;
+    }
+
+    .wc-status {
+        padding-left: 0;
+    }
+
+    .wc-message {
+        width: 362px;
+    }
+</style>
+
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            background: #fff url(Images/loading.gif) center center no-repeat;
+        }
+
+        .wc-webchat {
+            background-image: url('Zeacom/Images/Agent.png');
+        }
+        #chatTemplate {
+            display: none;
+        }
+
+        header .wc-terminate.wc-show {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatTemplate">
+    <div class="wc-webchat">
+        <header>
+            <div class="wc-buttons">
+                <a class="wc-terminate" href="" onclick="return false;">&times;</a>
+            </div>
+            <span class="wc-title"></span>
+            <span class="wc-ctistatus"></span>
+        </header>
+        <div class="wc-chatbox">
+            <div class="wc-status"></div>
+            <section class="wc-initiating">
+                <form>
+                    <fieldset>
+                        <legend>Your details</legend>
+                        <span class="z-dialog-welcome">Hi there, start a chat with online support now</span>
+                        <label class="wc-name-label" for="wc-name"></label>
+                        <input id="wc-name" type="text" class="wc-name-input" maxlength="64" />
+                        <label class="wc-error-label wc-name-error-label" for="wc-name"></label>
+                        <label class="wc-email-label" for="wc-email"></label>
+                        <input id="wc-email" type="email" class="wc-email-input" maxlength="128" />
+                        <label class="wc-error-label wc-email-error-label" for="wc-email"></label>
+                        
+                        <input type="button" class="wc-initiate" onclick="return false" />
+                        <input type="button" class="wc-terminate" disabled />
+                    </fieldset>
+                </form>
+                <p class="wc-welcome" />
+                <p class="wc-announcement" />
+                <p class="wc-progress" />
+                <p class="wc-eta" />
+            </section>
+            <section class="wc-chatting">
+                <ol class="wc-history"></ol>
+                <div class="wc-typing"></div>
+                <textarea class="wc-message" maxlength="1024"></textarea>
+            </section>
+        </div>
+    </div>
+</div>
+
+    <!-- Webchat requires both JQuery and the SignalR JQuery libraries. The next two lines obtain the Javascript files from well-known CDNs. -->
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.2.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.1.2.min.js" charset="UTF-8"></script>
+
+<!-- In order to save chat transcripts, Webchat uses the FileSaver.js library. This can be delivered from the WebMessaging application itself, as below. Chat transcript saving is an optional Webchat feature. Remember to use the fully qualified domain name for the WebMessaging server. -->
+<script type="text/javascript" src="https://webchat.liaisoncas.com:8085/webchat/client/FileSaver.min.js" charset="UTF-8"></script>
+
+<!-- Show a message if Web Chat cannot be loaded. -->
+<script type="text/javascript">
+    $.webChat = function () {
+        $('#nowebchat').show();
+    }
+</script>
+
+<!-- The Webchat Javascript interface. This must be delivered from the WebMessaging Server. Remember to use the fully qualified domain name for the WebMessaging server. -->
+<script type="text/javascript" src="https://webchat.liaisoncas.com:8085/webchat/client/webchat.min.js" charset="UTF-8"></script>
+
+
+    <script type="text/javascript" id="pageScript">
+        var agentImageUrl = '/Content/Zeacom/Images/Agent.png';
+        $(document).ready(function () {
+            $.webChat({
+                queue: 'CSUCHAT',
+                requireEmail: true,
+                autoOpen: true,
+                closeContainer : function (){},
+                htmlTemplate: 'chatTemplate',
+                sectionTransition: function (from, to) {
+                    $('.wc-webchat').css('background-image', 'none');
+                    from.addClass('wc-hide').removeClass('wc-show');
+                    to.addClass('wc-show').removeClass('wc-hide');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
